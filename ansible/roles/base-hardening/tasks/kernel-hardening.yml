@@ -1,0 +1,9 @@
+---
+- name: Apply sysctl kernel hardening parameters
+  ansible.posix.sysctl:
+    name: "{{ item.key }}"
+    value: "{{ item.value | string }}"
+    sysctl_set: true
+    state: present
+    reload: true
+  loop: "{{ sysctl_hardening | dict2items }}"

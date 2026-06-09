@@ -1,0 +1,55 @@
+---
+- name: Update apt cache and upgrade all packages
+  ansible.builtin.apt:
+    update_cache: true
+    upgrade: dist
+    cache_valid_time: 3600
+
+- name: Remove unnecessary packages
+  ansible.builtin.apt:
+    name: "{{ packages_to_remove }}"
+    state: absent
+    autoremove: true
+    purge: true
+
+- name: Install required packages
+  ansible.builtin.apt:
+    name: "{{ packages_to_install }}"
+    state: present
+
+- name: Enable and start unattended-upgrades service
+  ansible.builtin.systemd:
+    name: unattended-upgrades
+    enabled: true
+    state: started
+  when: ansible_service_mgr == 'systemd'
+
+- name: Set UFW default incoming policy to deny
+  community.general.ufw:
+    direction: incoming
+    policy: deny
+
+- name: Set UFW default outgoing policy to allow
+  community.general.ufw:
+    direction: outgoing
+    policy: allow
+
+- name: Allow HTTP and HTTPS traffic
+  community.general.ufw:
+    rule: allow
+    port: "{{ item }}"
+    proto: tcp
+  loop:
+    - '80'
+    - '443'
+
+- name: Enable UFW
+  community.general.ufw:
+    state: enabled
+
+- name: Ensure SSH service is enabled at boot
+  ansible.builtin.systemd:
+    name: "{{ ssh_service_name }}"
+    enabled: true
+    state: started
+  when: ansible_service_mgr == 'systemd'

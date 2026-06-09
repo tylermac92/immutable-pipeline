@@ -1,0 +1,16 @@
+---
+- name: Ensure nginx service is enabled and started
+  ansible.builtin.systemd:
+    name: nginx
+    state: started
+    enabled: true
+  when: ansible_service_mgr == 'systemd'
+
+- name: Deploy template-based index.html
+  ansible.builtin.template:
+    src: index.html.j2
+    dest: /var/www/html/index.html
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Reload nginx

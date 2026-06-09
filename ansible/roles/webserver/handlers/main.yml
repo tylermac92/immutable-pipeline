@@ -1,0 +1,6 @@
+---
+- name: Reload nginx
+  ansible.builtin.systemd:
+    name: nginx
+    state: reloaded
+  when: ansible_service_mgr == 'systemd'

@@ -1,0 +1,79 @@
+package:
+  nginx:
+    installed: true
+  ufw:
+    installed: true
+  fail2ban:
+    installed: true
+  unattended-upgrades:
+    installed: true
+
+service:
+  nginx:
+    enabled: true
+    running: true
+  ssh:
+    enabled: true
+    running: true
+  fail2ban:
+    enabled: true
+    running: true
+
+port:
+  tcp:22:
+    listening: true
+  tcp:80:
+    listening: true
+  tcp:25:
+    listening: false
+  tcp:3306:
+    listening: false
+
+file:
+  /var/www/html/index.html:
+    exists: true
+    owner: root
+    filetype: file
+
+command:
+  "sshd -T":
+    exit-status: 0
+    stdout:
+      - "permitrootlogin no"
+      - "passwordauthentication no"
+  "cat /etc/ssh/sshd_config.d/99-hardening.conf":
+    exit-status: 0
+    stdout:
+      - "X11Forwarding no"
+      - "PermitRootLogin no"
+      - "PasswordAuthentication no"
+  "ufw status":
+    exit-status: 0
+    stdout:
+      - "Status: active"
+
+sysctl:
+  net.ipv4.ip_forward:
+    value: "0"
+  net.ipv4.tcp_syncookies:
+    value: "1"
+  net.ipv4.conf.all.accept_source_route:
+    value: "0"
+  net.ipv4.conf.default.accept_source_route:
+    value: "0"
+  net.ipv4.conf.all.accept_redirects:
+    value: "0"
+  net.ipv4.conf.default.accept_redirects:
+    value: "0"
+  net.ipv4.icmp_echo_ignore_broadcasts:
+    value: "1"
+  net.ipv4.conf.all.log_martians:
+    value: "1"
+  net.ipv6.conf.all.accept_source_route:
+    value: "0"
+
+  /etc/ssh/sshd_config.d/99-hardening.conf:
+    exists: true
+    owner: root
+    mode: "0600"
+    filetype: file

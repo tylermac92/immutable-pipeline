@@ -1,0 +1,6 @@
+---
+- name: Restart sshd
+  ansible.builtin.systemd:
+    name: "{{ ssh_service_name }}"
+    state: restarted
+  when: ansible_service_mgr == 'systemd'

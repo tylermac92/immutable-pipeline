@@ -1,0 +1,9 @@
+---
+- name: Apply base hardening and webserver roles
+  hosts: all
+  become: true
+  gather_facts: true
+
+  roles:
+    - role: base-hardening
+    - role: webserver

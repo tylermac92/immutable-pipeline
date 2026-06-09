@@ -1,0 +1,36 @@
+---
+ssh_port: 22
+ssh_permit_root_login: "no"
+ssh_password_authentication: "no"
+ssh_x11_forwarding: "no"
+ssh_max_auth_retries: 3
+ssh_client_alive_interval: 300
+ssh_client_alive_count_max: 2
+ssh_allowed_users: "packer"
+
+packages_to_remove:
+  - telnet
+  - rsh-client
+  - talk
+
+packages_to_install:
+  - nginx
+  - ufw
+  - fail2ban
+  - unattended-upgrades
+  - apt-listchanges
+  - curl
+  - ca-certificates
+
+sysctl_hardening:
+  net.ipv4.ip_forward: 0
+  net.ipv4.tcp_syncookies: 1
+  net.ipv4.icmp_echo_ignore_broadcasts: 1
+  net.ipv4.conf.all.accept_source_route: 0
+  net.ipv6.conf.all.accept_source_route: 0
+  net.ipv4.conf.all.log_martians: 1
+  net.ipv4.conf.default.accept_source_route: 0
+  net.ipv4.conf.all.accept_redirects: 0
+  net.ipv4.conf.default.accept_redirects: 0
+
+ssh_service_name: "{{ 'ssh' if ansible_os_family == 'Debian' else 'sshd' }}"

@@ -1,0 +1,17 @@
+# GCP credentials - never commit
+application_default_credentials.json
+*.json.key
+*-service-account.json
+service-account*.json
+
+# Terraform state - contains secrets
+*.tfstate
+*.tfstate.backup
+.terraform/
+*.tfvars
+!*.tfvars.example
+.envrc
+sa-terraform-provisioner-key.json
+*.json.key
+
+packer/manifest.json

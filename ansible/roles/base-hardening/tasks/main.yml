@@ -1,0 +1,9 @@
+---
+- name: Apply system hardening
+  ansible.builtin.import_tasks: system.yml
+
+- name: Apply SSH hardening
+  ansible.builtin.import_tasks: ssh-hardening.yml
+
+- name: Apply kernel hardening
+  ansible.builtin.import_tasks: kernel-hardening.yml

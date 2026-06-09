@@ -1,0 +1,6 @@
+ansible==10.7.0
+ansible-core==2.17.9
+ansible-lint==25.1.3
+
+# Note: collections installed separately via ansible-galaxy
+# See ansible/requirements.yml
